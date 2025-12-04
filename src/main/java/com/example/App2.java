@@ -8,9 +8,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class App2 {
+public class App2 {    
+    private static final int DAY = 2;
+    private static final String FILE_PATH = "C:\\Users\\fpernias\\OneDrive - Capgemini\\"+
+    "Documents\\AoC2025\\maven-java21\\src\\resources\\input"+ DAY +".txt";
+
     public static void main(String[] args) throws IOException {
-        List<String> lines = readFileLines("C:\\Users\\fpernias\\OneDrive - Capgemini\\Documents\\AoC2025\\maven-java21\\src\\resources\\input2.txt");
+        List<String> lines = readFileLines(FILE_PATH);
         exo1(lines);
         exo2(lines);
     }

@@ -9,12 +9,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class App4 {
+    private static final int DAY = 4;
+    private static final String FILE_PATH = "C:\\Users\\fpernias\\OneDrive - Capgemini\\"+
+    "Documents\\AoC2025\\maven-java21\\src\\resources\\input"+ DAY +".txt";
+
+    public static List<String> readFileLines(String filePath) throws IOException {
+        List<String> lines = new ArrayList<>();
+        Path path = Paths.get(filePath);
+        try (BufferedReader br = Files.newBufferedReader(path)) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                lines.add(line);
+            }
+        }
+        return lines;
+    }
+
+
     public static void main(String[] args) throws IOException {
-        List<String> lines = readFileLines("C:\\Users\\fpernias\\OneDrive - Capgemini\\"+
-        "Documents\\AoC2025\\maven-java21\\src\\resources\\input4.txt");
+        List<String> lines = readFileLines(FILE_PATH);
         exo1(lines);
         exo2(lines);
-        
     }
 
     private static void exo2(List<String> lines) throws IOException {
@@ -84,7 +99,6 @@ public class App4 {
         }
         displayGridInFile(tempGrid,"C:\\Users\\fpernias\\OneDrive - Capgemini\\"+
         "Documents\\AoC2025\\maven-java21\\src\\resources\\output4.txt");
-
         System.out.println(zeros);
     }
 
@@ -117,18 +131,6 @@ public class App4 {
             }
         }
         System.out.println(zeros);
-    }
-
-    public static List<String> readFileLines(String filePath) throws IOException {
-        List<String> lines = new ArrayList<>();
-        Path path = Paths.get(filePath);
-        try (BufferedReader br = Files.newBufferedReader(path)) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                lines.add(line);
-            }
-        }
-        return lines;
     }
 
     public static void displayGridInFile(char[][] grid, String filePath) throws IOException {
