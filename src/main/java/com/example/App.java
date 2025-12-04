@@ -10,12 +10,9 @@ import java.util.List;
 
 public class App {
     public static void main(String[] args) throws IOException {
-        System.out.println("Hello, Java 21!");
-        // Exemple d'utilisation :
         List<String> lines = readFileLines("C:\\Users\\fpernias\\OneDrive - Capgemini\\Documents\\AoC2025\\maven-java21\\src\\resources\\input1.txt");
         exo1(lines);
         exo2(lines);
-        
     }
 
     private static void exo2(List<String> lines) {
@@ -53,12 +50,6 @@ public class App {
         System.out.println(zeros);
     }
 
-    /**
-     * Lit un fichier ligne à ligne et renvoie la liste des lignes.
-     * @param filePath chemin du fichier (String)
-     * @return liste de lignes
-     * @throws IOException si la lecture échoue
-     */
     public static List<String> readFileLines(String filePath) throws IOException {
         List<String> lines = new ArrayList<>();
         Path path = Paths.get(filePath);

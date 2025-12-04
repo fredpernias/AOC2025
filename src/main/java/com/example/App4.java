@@ -12,8 +12,6 @@ import java.util.List;
 
 public class App4 {
     public static void main(String[] args) throws IOException {
-        System.out.println("Hello, Java 21!");
-        // Exemple d'utilisation :
         List<String> lines = readFileLines("C:\\Users\\fpernias\\OneDrive - Capgemini\\"+
         "Documents\\AoC2025\\maven-java21\\src\\resources\\input4.txt");
         exo1(lines);
@@ -123,13 +121,6 @@ public class App4 {
         System.out.println(zeros);
     }
 
-
-    /**
-     * Lit un fichier ligne à ligne et renvoie la liste des lignes.
-     * @param filePath chemin du fichier (String)
-     * @return liste de lignes
-     * @throws IOException si la lecture échoue
-     */
     public static List<String> readFileLines(String filePath) throws IOException {
         List<String> lines = new ArrayList<>();
         Path path = Paths.get(filePath);
@@ -142,12 +133,6 @@ public class App4 {
         return lines;
     }
 
-    /**
-     * Writes a grid to a file.
-     * @param grid the character grid to write
-     * @param filePath the path where to write the file
-     * @throws IOException if writing fails
-     */
     public static void displayGridInFile(char[][] grid, String filePath) throws IOException {
         Path path = Paths.get(filePath);
         StringBuilder sb = new StringBuilder();

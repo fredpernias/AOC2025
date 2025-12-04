@@ -10,12 +10,9 @@ import java.util.List;
 
 public class App2 {
     public static void main(String[] args) throws IOException {
-        System.out.println("Hello, Java 21!");
-        // Exemple d'utilisation :
         List<String> lines = readFileLines("C:\\Users\\fpernias\\OneDrive - Capgemini\\Documents\\AoC2025\\maven-java21\\src\\resources\\input2.txt");
         exo1(lines);
         exo2(lines);
-        
     }
 
     private static void exo2(List<String> lines) {
@@ -72,7 +69,7 @@ public class App2 {
                 }
             }
             if (ok) {
-                return true; // Break early when a valid pattern is found
+                return true;
             }
         }
         return false;
