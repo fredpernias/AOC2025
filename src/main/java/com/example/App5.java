@@ -42,7 +42,13 @@ public class App5 {
 // ------------------------------------------------------------------------//
 // ------------------------------------------------------------------------//
 // ------------------------------------------------------------------------//
+    private static long minValue(String r1) {
+                return Long.parseLong(r1.split("-")[0]);
+    }
 
+    private static long maxValue(String r1) {
+        return Long.parseLong(r1.split("-")[1]);
+    }
 
 
     private static void exo2(List<String> lines)  {
@@ -55,10 +61,12 @@ public class App5 {
         Collections.sort(ranges,new java.util.Comparator<String>() {
             @Override
             public int compare(String r1, String r2) {
-                long min1 = Long.parseLong(r1.split("-")[0]);
-                long min2 = Long.parseLong(r2.split("-")[0]);
+                long min1 = minValue(r1);
+                long min2 = minValue(r2);
                 return Long.compare(min1, min2);
             }
+
+            
         });
 
         List<String> rangesMerged = new ArrayList<>();
@@ -66,10 +74,10 @@ public class App5 {
         String currentRange = ranges.get(0);
         for ( int i = 1; i < ranges.size() - 1; i++) {
             String nextRange = ranges.get(i + 1);
-            long min1 = Long.parseLong(currentRange.split("-")[0]);
-            long max1 = Long.parseLong(currentRange.split("-")[1]);
-            long min2 = Long.parseLong(nextRange.split("-")[0]);
-            long max2 = Long.parseLong(nextRange.split("-")[1]);
+            long min1 = minValue(currentRange);
+            long max1 = maxValue(currentRange);
+            long min2 = minValue(nextRange);
+            long max2 = maxValue(nextRange);
             if(min2 <= max1 + 1) {
                 long newMax = Math.max(max1, max2);
                 currentRange = min1 + "-" + newMax;
@@ -81,7 +89,7 @@ public class App5 {
         rangesMerged.add(currentRange);
 
         for (int i = 0; i < rangesMerged.size(); i++) {  
-            zeros += Long.parseLong(rangesMerged.get(i).split("-")[1]) - Long.parseLong(rangesMerged.get(i).split("-")[0]) + 1;
+            zeros += maxValue(rangesMerged.get(i)) - minValue(rangesMerged.get(i)) + 1;
         }
         System.out.println(zeros);
     }
@@ -100,9 +108,8 @@ public class App5 {
         for (String id : ids) { 
             long idAsNumber = Long.parseLong(id);
             for (String range : ranges) {
-                String[] parts = range.split("-");
-                long min = Long.parseLong(parts[0]);
-                long max = Long.parseLong(parts[1]);
+                long min = minValue(range);
+                long max = maxValue(range);
                 if (idAsNumber >= min && idAsNumber <= max) {
                     zeros++;
                     break;
