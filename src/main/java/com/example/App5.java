@@ -65,8 +65,6 @@ public class App5 {
                 long min2 = minValue(r2);
                 return Long.compare(min1, min2);
             }
-
-            
         });
 
         List<String> rangesMerged = new ArrayList<>();
