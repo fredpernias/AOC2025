@@ -173,6 +173,7 @@ public class App8 {
     public int find(int u) {
         if (parent[u] != u) {
             parent[u] = find(parent[u]); 
+        }
         return parent[u];
     }
 
