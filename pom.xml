@@ -10,9 +10,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>21</maven.compiler.release>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.release>17</maven.compiler.release>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <junit.jupiter.version>5.10.0</junit.jupiter.version>
     </properties>
 
@@ -37,7 +37,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <release>21</release>
+                    <release>17</release>
                 </configuration>
             </plugin>
             <plugin>
@@ -46,6 +46,14 @@
                 <version>3.1.2</version>
                 <configuration>
                     <useModulePath>false</useModulePath>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <mainClass>com.example.App8</mainClass>
                 </configuration>
             </plugin>
         </plugins>

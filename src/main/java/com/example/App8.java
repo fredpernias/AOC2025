@@ -6,9 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class App8 {
     // Extrait dynamiquement le numéro du jour depuis le nom de la classe (ex: App5 -> 5)
@@ -44,16 +46,112 @@ public class App8 {
 // ------------------------------------------------------------------------//
 // ------------------------------------------------------------------------//
     
+    private static final int CONNECTIONS_TO_MAKE = 1000;
+    private record Point3D(long x, long y, long z) {}
+    private record PotentialConnection(long squaredDistance, int pointIndex1, int pointIndex2) {}
+
+
+
     private static void exo2(List<String> lines)  {
         long zeros = 0;
         System.out.println(zeros);
     }
 
-     private static void exo1(List<String> lines) {
+    private static void exo1(List<String> lines) {
         long zeros = 0;
-        
+        List<Point3D> points = parsePoints(lines);
+        int pointCount = points.size();
+
+        List<PotentialConnection> allConnections = calculateAllPotentialConnections(points);
+        allConnections.sort(Comparator.comparingLong(PotentialConnection::squaredDistance));
+        List<PotentialConnection> shortestConnections = allConnections.subList(0, CONNECTIONS_TO_MAKE);
+
+        DisjointSetUnion dsu = new DisjointSetUnion(pointCount);
+        for (PotentialConnection conn : shortestConnections) {
+            dsu.union(conn.pointIndex1(), conn.pointIndex2());
+        }
+        List<Integer> componentSizes = dsu.getComponentSizes();
+        componentSizes.sort(Collections.reverseOrder());
+        zeros = (long) componentSizes.get(0) * componentSizes.get(1) * componentSizes.get(2);
         System.out.println(zeros);
     }
 
 
+    private static List<Point3D> parsePoints(List<String> lines) {
+        return lines.stream()
+            .map(line -> {
+                String[] parts = line.split(",");
+                return new Point3D(
+                    Long.parseLong(parts[0]),
+                    Long.parseLong(parts[1]),
+                    Long.parseLong(parts[2])
+                );
+            })
+            .collect(Collectors.toList());
+    }
+
+    private static List<PotentialConnection> calculateAllPotentialConnections(List<Point3D> points) {
+        int pointCount = points.size();
+        List<PotentialConnection> connections = new ArrayList<>();
+        for (int i = 0; i < pointCount; i++) {
+            for (int j = i + 1; j < pointCount; j++) {
+                Point3D p1 = points.get(i);
+                Point3D p2 = points.get(j);
+                long dx = p1.x() - p2.x();
+                long dy = p1.y() - p2.y();
+                long dz = p1.z() - p2.z();
+                long squaredDistance = dx * dx + dy * dy + dz * dz;
+                connections.add(new PotentialConnection(squaredDistance, i, j));
+            }
+        }
+        return connections;
+    }
+
+    private static class DisjointSetUnion {
+
+    private final int[] parent;
+    private final int[] componentSize;
+
+    public DisjointSetUnion(int numberOfElements) {
+        parent = new int[numberOfElements];
+        componentSize = new int[numberOfElements];
+        for (int i = 0; i < numberOfElements; i++) {
+            parent[i] = i;
+            componentSize[i] = 1;
+        }
+    }
+
+    public int find(int u) {
+        if (parent[u] != u) {
+            parent[u] = find(parent[u]); // Path compression
+        }
+        return parent[u];
+    }
+
+    public void union(int u, int v) {
+        int rootU = find(u);
+        int rootV = find(v);
+        if (rootU != rootV) {
+           
+            if (componentSize[rootU] < componentSize[rootV]) {
+                int temp = rootU;
+                rootU = rootV;
+                rootV = temp;
+            }
+            parent[rootV] = rootU;
+            componentSize[rootU] += componentSize[rootV];
+        }
+    }
+
+    public List<Integer> getComponentSizes() {
+        List<Integer> sizes = new ArrayList<>();
+        for (int i = 0; i < parent.length; i++) {
+            if (parent[i] == i) {
+                sizes.add(componentSize[i]);
+            }
+        }
+        return sizes;
+    }
+}
+    
 }
