@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class App6 {
-    // Extrait dynamiquement le numéro du jour depuis le nom de la classe (ex: App5 -> 5)
     private static final int DAY =6;
     private static final String FILE_PATH = "C:\\Users\\fpernias\\OneDrive - Capgemini\\" +
         "Documents\\AoC2025\\maven-java21\\src\\resources\\input" + DAY + ".txt";

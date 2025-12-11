@@ -54,6 +54,7 @@ public class App8 {
 
     private static void exo2(List<String> lines)  {
         long zeros = 0;
+        zeros = calculateFinalConnectionXProduct(lines);
         System.out.println(zeros);
     }
 
@@ -76,6 +77,49 @@ public class App8 {
         System.out.println(zeros);
     }
 
+
+   
+
+   
+    public static long calculateProductOfLargestCircuits(List<String> inputLines) {
+        List<Point3D> points = parsePoints(inputLines);
+        int pointCount = points.size();
+
+        List<PotentialConnection> allConnections = calculateAllPotentialConnections(points);
+
+        allConnections.sort(Comparator.comparingLong(PotentialConnection::squaredDistance));
+        List<PotentialConnection> shortestConnections = allConnections.subList(0, 1000);
+
+        DisjointSetUnion dsu = new DisjointSetUnion(pointCount);
+        for (PotentialConnection conn : shortestConnections) {
+            dsu.union(conn.pointIndex1(), conn.pointIndex2());
+        }
+
+        List<Integer> componentSizes = dsu.getComponentSizes();
+
+        componentSizes.sort(Collections.reverseOrder());
+        return (long) componentSizes.get(0) * componentSizes.get(1) * componentSizes.get(2);
+    }
+    
+    
+    public static long calculateFinalConnectionXProduct(List<String> inputLines) {
+        List<Point3D> points = parsePoints(inputLines);
+        int pointCount = points.size();
+
+        List<PotentialConnection> allConnections = calculateAllPotentialConnections(points);
+        allConnections.sort(Comparator.comparingLong(PotentialConnection::squaredDistance));
+
+        DisjointSetUnion dsu = new DisjointSetUnion(pointCount);
+        for (PotentialConnection conn : allConnections) {
+            dsu.union(conn.pointIndex1(), conn.pointIndex2());
+            if (dsu.getComponentCount() == 1) {
+                Point3D p1 = points.get(conn.pointIndex1());
+                Point3D p2 = points.get(conn.pointIndex2());
+                return p1.x() * p2.x();
+            }
+        }
+        throw new IllegalStateException("Should have found the final connection");
+    }
 
     private static List<Point3D> parsePoints(List<String> lines) {
         return lines.stream()
@@ -107,24 +151,28 @@ public class App8 {
         return connections;
     }
 
+
     private static class DisjointSetUnion {
 
     private final int[] parent;
     private final int[] componentSize;
+    private int componentCount;
 
+   
     public DisjointSetUnion(int numberOfElements) {
-        parent = new int[numberOfElements];
-        componentSize = new int[numberOfElements];
+        this.componentCount = numberOfElements;
+        this.parent = new int[numberOfElements];
+        this.componentSize = new int[numberOfElements];
         for (int i = 0; i < numberOfElements; i++) {
             parent[i] = i;
             componentSize[i] = 1;
         }
     }
 
+
     public int find(int u) {
         if (parent[u] != u) {
-            parent[u] = find(parent[u]); // Path compression
-        }
+            parent[u] = find(parent[u]); 
         return parent[u];
     }
 
@@ -132,7 +180,6 @@ public class App8 {
         int rootU = find(u);
         int rootV = find(v);
         if (rootU != rootV) {
-           
             if (componentSize[rootU] < componentSize[rootV]) {
                 int temp = rootU;
                 rootU = rootV;
@@ -140,17 +187,23 @@ public class App8 {
             }
             parent[rootV] = rootU;
             componentSize[rootU] += componentSize[rootV];
+            componentCount--;
         }
     }
 
+    
     public List<Integer> getComponentSizes() {
         List<Integer> sizes = new ArrayList<>();
         for (int i = 0; i < parent.length; i++) {
-            if (parent[i] == i) {
+            if (parent[i] == i) { // i is a root of a component
                 sizes.add(componentSize[i]);
             }
         }
         return sizes;
+    }
+
+    public int getComponentCount() {
+        return componentCount;
     }
 }
     
